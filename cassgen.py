@@ -60,8 +60,13 @@ class CassFile(File):
         with open(self.filepath, 'a') as newfile:
             newfile.write(" $END\n")
             try:
-                with open(self.datfile + "_" + str(self.filenumber) + ".dat", 'r') as datfile:
-                    datlines=datfile.readlines()
+                if self.datfile == "empty":
+                    with open(str(self.filenumber) + "_rhf.dat", 'r') as datfile:
+                        datlines=datfile.readlines()
+                else:
+                    with open(self.datfile + str(self.filenumber) + "_rhf.dat", 'r') as datfile:
+                        datlines=datfile.readlines()
+
             except FileNotFoundError:
                 print("dat file not found, appending error message")
                 datlines=["could not find dat file"]
@@ -89,6 +94,8 @@ if __name__ == '__main__':
             args[currentkey] = currentvalues
 
     del args['ignore']
+
+    print(args)
 
     with open(masterfilepath) as file:
         lines = file.readlines()
